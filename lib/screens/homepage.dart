@@ -1,13 +1,6 @@
 import 'package:covid_stats/objects/graph.dart';
+import 'package:covid_stats/objects/measures.dart';
 import 'package:flutter/material.dart';
-
-// import 'bar_chart/bar_chart_page2.dart';
-// import 'line_chart/line_chart_page.dart';
-// import 'line_chart/line_chart_page2.dart';
-// import 'line_chart/line_chart_page3.dart';
-// import 'line_chart/line_chart_page4.dart';
-// import 'pie_chart/pie_chart_page.dart';
-// import 'scatter_chart/scatter_chart_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -51,12 +44,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text(
               '$text',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+              ),
               softWrap: true,
             ),
             Text(
               '$values',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+              ),
               softWrap: true,
             )
           ],
@@ -126,19 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 35,
                   width: 150,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Color(0xFF224679),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.254),
-                          blurRadius: 7.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(
-                            0.0,
-                            3.0,
-                          ),
-                        )
-                      ]),
+                    borderRadius: BorderRadius.circular(30),
+                    color: Color(0xFF224679),
+                    gradient: LinearGradient(colors: [
+                      Colors.blue.withOpacity(0.6),
+                      Colors.lightBlue.withOpacity(0.3),
+                      Colors.blue.withOpacity(0.4)
+                    ]),
+                  ),
                 ),
               ],
             ),
@@ -148,26 +144,17 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              margin: EdgeInsets.all(13),
-              elevation: 10,
-              shadowColor: Colors.blue,
-              borderOnForeground: false,
-              semanticContainer: false,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                height: MediaQuery.of(context).size.height * 0.5,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    Text('$dropdownValue'),
-                    ShowGraph(),
-                  ],
-                ),
+            PreventMeasures(),
+            Text('$dropdownValue'),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              // height: MediaQuery.of(context).size.height*0.5,
+              margin: EdgeInsets.only(
+                left: 10,
+                bottom: 10,
+                right: 10,
               ),
-              color: Color(0xFF11233c),
+              child: ShowGraph(),
             ),
             Row(
               children: [
