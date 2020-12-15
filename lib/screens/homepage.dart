@@ -1,6 +1,7 @@
 import 'package:covid_stats/objects/graph.dart';
 import 'package:covid_stats/objects/measures.dart';
 import 'package:flutter/material.dart';
+import '../data/stats_data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -179,6 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
           // Add Some setting functionality
           // 1. adding refresh idea
           // 2. change
+          var d1 = StatsData();
+          d1.printData();
         },
       ),
     );
