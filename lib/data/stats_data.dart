@@ -1,24 +1,60 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:intl/intl.dart';
 class StatsData with ChangeNotifier {
   
-  List allCountries = [];
-  void getCountries() async {
+  List _allCountries = [];
+  String selectedCountry;
+  int totalDeath;
+  int totalRecovered;
+  int totalConfirmed;
+  String lastUpdate;
+
+
+  // working all good
+  void  fetchAndSetCountries() async {
     final countryUrl = 'https://covid19.mathdro.id/api/countries';
     try {
       final response = await http.get(countryUrl);
       var data = convert.jsonDecode(response.body);  
      data['countries'].forEach((val) {
-       var temp = val['name'];
-       print(val['name']);
-       allCountries.add(temp);
+       String temp = val['name'];
+       if(temp.length <= 20)
+        _allCountries.add(temp);
      } );
-     
+     _allCountries.insert(0, 'All');
     } catch (error) {
       throw error;
     }
   }
+
+  List<String> get allCountries{
+    return [..._allCountries];
+  }
+
+
+  void setDataByCountry(String selectedCountry) async {
+    final url = "https://covid19.mathdro.id/api/countries/$selectedCountry";
+    try {
+      final response = await http.get(url);
+      var data = convert.jsonDecode(response.body);
+      totalConfirmed = data['confirmed']['value'];
+      totalRecovered = data['recovered']['value'];
+      totalDeath = data['deaths']['value'];
+      lastUpdate = data['lastUpdate'];
+
+      // print(data['lastUpdate']);
+      // print(data);
+      notifyListeners();
+    } catch (error) {
+      throw(error);
+    }
+  }
+
+
+
+
 }
 
 

@@ -1,33 +1,13 @@
 import 'package:covid_stats/custom_widgets/graph.dart';
 import 'package:covid_stats/custom_widgets/measures.dart';
+import 'package:covid_stats/custom_widgets/search_bar.dart';
+import 'package:covid_stats/data/stats_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+class HomeScreen extends StatelessWidget {
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<String> options = <String>[
-    'All',
-    'One',
-    'Two',
-    'Three',
-    'Four',
-    'sdas',
-    'sas',
-    'sass',
-    'sasasas'
-  ];
-
-  String dropdownValue = 'All';
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Widget customCard(String text, int values) {
+  Widget customCard(String text, int values, BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: EdgeInsets.all(10),
@@ -69,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _statsData = Provider.of<StatsData>(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(170.0),
@@ -82,10 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottomRight: Radius.circular(20),
               ),
               image: DecorationImage(
-                  image: AssetImage('assets/images/virusbg.jpg'),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.white.withAlpha(180), BlendMode.dstOut)),
+                image: AssetImage('assets/images/virusbg.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.white.withAlpha(180),
+                  BlendMode.dstOut,
+                ),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,31 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        //TODO
-                        // change content of screen according to the selected item
-                        dropdownValue = newValue;
-                        print(dropdownValue);
-                      });
-                    },
-                    iconDisabledColor: Colors.grey,
-                    iconEnabledColor: Colors.white,
-                    style: TextStyle(color: Colors.white),
-                    dropdownColor: Theme.of(context).primaryColor,
-                    underline: SizedBox(),
-                    items:
-                        options.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
+                  child: CountrySearchBar(),
                   height: 35,
-                  width: 150,
+                  width: MediaQuery.of(context).size.width*0.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Color(0xFF224679),
@@ -145,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             PreventMeasures(),
-            Text('$dropdownValue'),
+            // Text('$dropdownValue'),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               // height: MediaQuery.of(context).size.height*0.5,
@@ -158,17 +120,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                customCard('Total Cases', 1181378),
-                customCard('Total Death', 8271277),
+                customCard('Total Cases', _statsData.totalConfirmed, context),
+                customCard('Total Death', _statsData.totalDeath, context),
               ],
             ),
-            Row(
-              children: [
-                customCard('Daily Cases', 8271261),
-                customCard('Daily Death', 99821917),
-              ],
-            ),
-            customCard('Total Recovered', 98719382),
+            // Row(
+            //   children: [
+            //     customCard('Daily Cases', 8271261, context),
+            //     customCard('Daily Death', 99821917, context),
+            //   ],
+            // ),
+            customCard('Total Recovered', _statsData.totalRecovered, context),
           ],
         ),
       ),
@@ -179,8 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
           // Add Some setting functionality
           // 1. adding refresh idea
           // 2. change
-          // var d1 = StatsData();
-          // d1.printData();
         },
       ),
     );

@@ -1,54 +1,52 @@
 import 'package:flutter/material.dart';
-// void main() {
-//   runApp( MaterialApp(
-//     debugShowCheckedModeBanner: false,
-//     theme:  ThemeData(
-//       primaryColor: const Color(0xFF02BB9F),
-//       primaryColorDark: const Color(0xFF167F67),
-//       accentColor: const Color(0xFF167F67),
-//     ),
-//     home:  CountrySearchBar(),
-//   ));
-// }
-class Item {
-  const Item(this.name,this.icon);
-  final String name;
-  final Icon icon;
-}
+import 'package:provider/provider.dart';
+import '../data/stats_data.dart';
+
 class CountrySearchBar extends StatefulWidget {
-  State createState() =>  CountrySearchBarState();
+  State createState() => CountrySearchBarState();
 }
+
 class CountrySearchBarState extends State<CountrySearchBar> {
-  Item selectedUser;
-  List<Item> users = <Item>[
-    const Item('Android',Icon(Icons.android,color:  const Color(0xFF167F67),)),
-    const Item('Flutter',Icon(Icons.flag,color:  const Color(0xFF167F67),)),
-    const Item('ReactNative',Icon(Icons.format_indent_decrease,color:  const Color(0xFF167F67),)),
-    const Item('iOS',Icon(Icons.mobile_screen_share,color:  const Color(0xFF167F67),)),
-  ];
+  bool _isinit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isinit) Provider.of<StatsData>(context, listen: false).fetchAndSetCountries();
+    _isinit = false;
+    super.didChangeDependencies();
+  }
+
+  List<String> options = <String>[];
+
+  String selectedValue = 'All';
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Item>(
-      hint:  Text("Select item"),
-      value: selectedUser,
-      onChanged: (Item value) {
+    var _statsData = Provider.of<StatsData>(context);
+    options = _statsData.allCountries;
+    _statsData.selectedCountry = selectedValue;
+    return DropdownButton<String>(
+      value: selectedValue,
+      onChanged: (String newValue) {
         setState(() {
-          selectedUser = value;
+          //TODO
+          // change content of screen according to the selected item
+          // current selected Country
+          _statsData.selectedCountry = newValue;
+          _statsData.setDataByCountry(_statsData.selectedCountry);
+          selectedValue = newValue;
+          print(_statsData.selectedCountry);
         });
       },
-      items: users.map((Item user) {
-        return  DropdownMenuItem<Item>(
-          value: user,
-          child: Row(
-            children: <Widget>[
-              user.icon,
-              SizedBox(width: 10,),
-              Text(
-                user.name,
-                style:  TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
+      iconEnabledColor: Colors.white,
+      style: TextStyle(
+        fontSize: MediaQuery.of(context).textScaleFactor * 14,
+      ),
+      dropdownColor: Theme.of(context).primaryColor,
+      underline: SizedBox(),
+      items: options.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
         );
       }).toList(),
     );
