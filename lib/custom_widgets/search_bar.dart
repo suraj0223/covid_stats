@@ -7,32 +7,48 @@ class CountrySearchBar extends StatefulWidget {
 }
 
 class CountrySearchBarState extends State<CountrySearchBar> {
+  
+  List<String> options = <String>[];
+  String selectedValue = 'All';
   bool _isinit = true;
 
   @override
+  void initState() {
+    Future.delayed(Duration.zero).then((value) {
+      var _statsData = Provider.of<StatsData>(context, listen: false);
+      _statsData.selectedCountry = "All";
+      selectedValue = 'All';
+      _statsData.setDataByCountry(_statsData.selectedCountry);
+    } );
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
-    if (_isinit) Provider.of<StatsData>(context, listen: false).fetchAndSetCountries();
+    if (_isinit) Provider.of<StatsData>(context, listen: true).fetchAndSetCountries();
     _isinit = false;
     super.didChangeDependencies();
   }
 
-  List<String> options = <String>[];
-
-  String selectedValue = 'All';
   @override
   Widget build(BuildContext context) {
-    var _statsData = Provider.of<StatsData>(context);
+    var _statsData = Provider.of<StatsData>(context, listen: true);
     options = _statsData.allCountries;
     _statsData.selectedCountry = selectedValue;
     return DropdownButton<String>(
       value: selectedValue,
       onChanged: (String newValue) {
         setState(() {
-          //TODO
-          // change content of screen according to the selected item
-          // current selected Country
           _statsData.selectedCountry = newValue;
+
+          // set overall data by country 
           _statsData.setDataByCountry(_statsData.selectedCountry);
+
+          // set overall data on daily basis
+          //TODO : Not todays data
+          if(selectedValue != 'All')
+            _statsData.dailyDatabyCountry(_statsData.selectedCountry);
+
           selectedValue = newValue;
           print(_statsData.selectedCountry);
         });

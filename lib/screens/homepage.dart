@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-
   Widget customCard(String text, int values, BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -25,8 +24,14 @@ class HomeScreen extends StatelessWidget {
             Text(
               '$text',
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
+                fontSize: 15,
+                shadows: [
+                  Shadow(
+                    color: Colors.blueAccent,
+                    blurRadius: 3.0
+                  )
+                ],
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
               softWrap: true,
@@ -87,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   child: CountrySearchBar(),
                   height: 35,
-                  width: MediaQuery.of(context).size.width*0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Color(0xFF224679),
@@ -104,35 +109,46 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            PreventMeasures(),
-            // Text('$dropdownValue'),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              // height: MediaQuery.of(context).size.height*0.5,
-              margin: EdgeInsets.only(
-                left: 10,
-                bottom: 10,
-                right: 10,
-              ),
-              child: ShowGraph(),
+        child: Column(children: [
+          PreventMeasures(),
+          // Text('$dropdownValue'),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            // height: MediaQuery.of(context).size.height*0.5,
+            margin: EdgeInsets.only(
+              left: 10,
+              bottom: 10,
+              right: 10,
             ),
-            Row(
-              children: [
-                customCard('Total Cases', _statsData.totalConfirmed, context),
-                customCard('Total Death', _statsData.totalDeath, context),
-              ],
-            ),
-            // Row(
-            //   children: [
-            //     customCard('Daily Cases', 8271261, context),
-            //     customCard('Daily Death', 99821917, context),
-            //   ],
-            // ),
-            customCard('Total Recovered', _statsData.totalRecovered, context),
-          ],
-        ),
+            child: ShowGraph(),
+          ),
+
+          customCard(
+              'Total Confirmed Cases', _statsData.totalConfirmed, context),
+          Row(
+            children: [
+              customCard('Total Death', _statsData.totalDeath, context),
+              customCard('Total Recovered', _statsData.totalRecovered, context),
+            ],
+          ),
+
+          _statsData.selectedCountry != 'All'
+              ? Column(
+                  children: [
+                    customCard(
+                        'Daily Active Cases', _statsData.dailyActive, context),
+                    Row(
+                      children: [
+                        customCard(
+                            'Daily Death', _statsData.dailyDeath, context),
+                        customCard('Daily Recoverd', _statsData.dailyRecovered,
+                            context)
+                      ],
+                    ),
+                  ],
+                )
+              : Container(),
+        ]),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.settings),
