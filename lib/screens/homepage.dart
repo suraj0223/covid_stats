@@ -25,12 +25,7 @@ class HomeScreen extends StatelessWidget {
               '$text',
               style: TextStyle(
                 fontSize: 15,
-                shadows: [
-                  Shadow(
-                    color: Colors.blueAccent,
-                    blurRadius: 3.0
-                  )
-                ],
+                shadows: [Shadow(color: Colors.blueAccent, blurRadius: 3.0)],
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
@@ -127,27 +122,18 @@ class HomeScreen extends StatelessWidget {
               'Total Confirmed Cases', _statsData.totalConfirmed, context),
           Row(
             children: [
-              customCard('Total Death', _statsData.totalDeath, context),
+              customCard('Total Death', _statsData.totalDeaths, context),
               customCard('Total Recovered', _statsData.totalRecovered, context),
             ],
           ),
 
-          _statsData.selectedCountry != 'All'
-              ? Column(
-                  children: [
-                    customCard(
-                        'Daily Active Cases', _statsData.dailyActive, context),
-                    Row(
-                      children: [
-                        customCard(
-                            'Daily Death', _statsData.dailyDeath, context),
-                        customCard('Daily Recoverd', _statsData.dailyRecovered,
-                            context)
-                      ],
-                    ),
-                  ],
-                )
-              : Container(),
+          customCard('New Confirmed Cases', _statsData.newConfirmed, context),
+          Row(
+            children: [
+              customCard('New Deaths', _statsData.newDeaths, context),
+              customCard('New Recovered', _statsData.newRecovered, context)
+            ],
+          ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(

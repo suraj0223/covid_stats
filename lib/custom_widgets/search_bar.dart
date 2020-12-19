@@ -9,27 +9,19 @@ class CountrySearchBar extends StatefulWidget {
 class CountrySearchBarState extends State<CountrySearchBar> {
   
   List<String> options = <String>[];
-  String selectedValue = 'All';
-  bool _isinit = true;
+  String selectedValue = 'Global';
 
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
       var _statsData = Provider.of<StatsData>(context, listen: false);
-      _statsData.selectedCountry = "All";
-      selectedValue = 'All';
+      _statsData.selectedCountry = "Global";
+      selectedValue = 'Global';
       _statsData.setDataByCountry(_statsData.selectedCountry);
+      _statsData.fetchAndSetCountries();
     } );
     super.initState();
   }
-
-  @override
-  void didChangeDependencies() {
-    if (_isinit) Provider.of<StatsData>(context, listen: true).fetchAndSetCountries();
-    _isinit = false;
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     var _statsData = Provider.of<StatsData>(context, listen: true);
@@ -40,14 +32,8 @@ class CountrySearchBarState extends State<CountrySearchBar> {
       onChanged: (String newValue) {
         setState(() {
           _statsData.selectedCountry = newValue;
-
           // set overall data by country 
           _statsData.setDataByCountry(_statsData.selectedCountry);
-
-          // set overall data on daily basis
-          //TODO : Not todays data
-          if(selectedValue != 'All')
-            _statsData.dailyDatabyCountry(_statsData.selectedCountry);
 
           selectedValue = newValue;
           print(_statsData.selectedCountry);
