@@ -1,3 +1,5 @@
+// import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -71,4 +73,13 @@ class StatsData with ChangeNotifier {
       throw (error);
     }
   }
+
+
+  // news api 
+//   http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=5dfea315673045298bd2b28322c28803
+// 5dfea315673045298bd2b28322c28803
+
+
+
+  
 }

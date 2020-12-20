@@ -1,4 +1,6 @@
-import 'package:covid_stats/custom_widgets/graph.dart';
+// import 'package:covid_stats/custom_widgets/graph.dart';
+
+import 'package:covid_stats/custom_widgets/aboutCovid.dart';
 import 'package:covid_stats/custom_widgets/measures.dart';
 import 'package:covid_stats/custom_widgets/search_bar.dart';
 import 'package:covid_stats/data/stats_data.dart';
@@ -8,7 +10,12 @@ import 'package:provider/provider.dart';
 class HomeScreen extends StatelessWidget {
   Widget customCard(String text, int values, BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
       margin: EdgeInsets.all(10),
       elevation: 10,
       shadowColor: Colors.blue,
@@ -18,6 +25,15 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.only(top: 30, bottom: 30),
         height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width * 0.45,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+            border: Border.all(
+              width: 2.0,
+              color: Colors.blueAccent,
+            )),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -25,14 +41,19 @@ class HomeScreen extends StatelessWidget {
               '$text',
               style: TextStyle(
                 fontSize: 15,
-                shadows: [Shadow(color: Colors.blueAccent, blurRadius: 3.0)],
+                shadows: [
+                  Shadow(
+                    color: Colors.blueAccent,
+                    blurRadius: 3.0,
+                  )
+                ],
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
               softWrap: true,
             ),
             Text(
-              '$values',
+              values == null ? 'N/A' : '$values',
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.w900,
@@ -44,6 +65,21 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       color: Color(0xFF11233c),
+    );
+  }
+
+  Widget headingWidget(String heading, context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Text(
+        heading,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: MediaQuery.textScaleFactorOf(context) * 25,
+            fontWeight: FontWeight.w700),
+        softWrap: true,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -77,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   'Covid Statics'.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 35,
+                    fontSize: MediaQuery.textScaleFactorOf(context) * 35,
                     fontWeight: FontWeight.w700,
                     color: Colors.white.withAlpha(200),
                   ),
@@ -91,6 +127,7 @@ class HomeScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     color: Color(0xFF224679),
+                    border: Border.all(color: Colors.blueAccent, width: 2),
                     gradient: LinearGradient(colors: [
                       Colors.blue.withOpacity(0.6),
                       Colors.lightBlue.withOpacity(0.3),
@@ -105,18 +142,22 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          headingWidget('About', context),
+          AboutCovid(),
+          headingWidget('Preventive Measures', context),
           PreventMeasures(),
+
           // Text('$dropdownValue'),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            // height: MediaQuery.of(context).size.height*0.5,
-            margin: EdgeInsets.only(
-              left: 10,
-              bottom: 10,
-              right: 10,
-            ),
-            child: ShowGraph(),
-          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width * 0.9,
+          //   // height: MediaQuery.of(context).size.height*0.5,
+          //   margin: EdgeInsets.only(
+          //     left: 10,
+          //     bottom: 10,
+          //     right: 10,
+          //   ),
+          //   child: ShowGraph(),
+          // ),
 
           customCard(
               'Total Confirmed Cases', _statsData.totalConfirmed, context),
@@ -137,12 +178,50 @@ class HomeScreen extends StatelessWidget {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.settings),
+        child: Icon(Icons.arrow_downward_rounded),
         onPressed: () {
           // TODO
           // Add Some setting functionality
           // 1. adding refresh idea
           // 2. change
+          showDialog(
+            context: context,
+            //  builder: (_) => Text('Under Maintenance !'),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: AnimatedContainer(
+                duration: Duration(seconds: 5),
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.3,
+                margin: EdgeInsets.all(10),
+                child: Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.dangerous, size: 100,),
+                        Text(
+                  'Under Maintenance !',
+                  style: TextStyle(fontSize: 30),
+                  softWrap: true,
+                ),
+                      ],
+                    )),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    border: Border.all(
+                      color: Colors.blueAccent,
+                      width: 2,
+                    )),
+              ),
+            ),
+          );
         },
       ),
     );

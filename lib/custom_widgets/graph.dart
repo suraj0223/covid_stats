@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+// import 'package:provider/provider.dart';
+// import '../data/stats_data.dart';
+// import 'package:intl/intl.dart';
 
 class ShowGraph extends StatefulWidget {
   @override
@@ -7,6 +10,18 @@ class ShowGraph extends StatefulWidget {
 }
 
 class _ShowGraphState extends State<ShowGraph> {
+  List data = [];
+
+  // @override
+  // void initState() {
+  //   Future.delayed(Duration.zero).then((value) {
+  //     var _statsData = Provider.of<StatsData>(context);
+  //     _statsData.setGraphData();
+  //     data = _statsData.monthlydata;
+  //   });
+  //   super.initState();
+  // }
+
   List<LineChartBarData> linesBarData1() {
     final LineChartBarData lineChartBarData1 = LineChartBarData(
       spots: [
@@ -19,7 +34,6 @@ class _ShowGraphState extends State<ShowGraph> {
         FlSpot(10, 2),
         FlSpot(11, 1.8),
         FlSpot(12, 3),
-    
       ],
       isCurved: true,
       colors: [
