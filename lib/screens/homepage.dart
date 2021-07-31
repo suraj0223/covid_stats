@@ -186,8 +186,7 @@ class HomeScreen extends StatelessWidget {
           // 2. change
           showDialog(
             context: context,
-            //  builder: (_) => Text('Under Maintenance !'),
-            child: Dialog(
+             builder: (_) => Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
